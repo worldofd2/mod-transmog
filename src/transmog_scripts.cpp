@@ -580,11 +580,25 @@ public:
         AddToDatabase(player, it);
     }
 
+    void OnGroupRollRewardItem(Player* player, Item* item, uint32 /*count*/, RollVote /*voteType*/, Roll* /*roll*/)
+    {
+        if (!sT->GetUseCollectionSystem() || !item)
+            return;
+        if (item->GetTemplate()->Bonding == ItemBondingType::BIND_WHEN_PICKED_UP || item->IsSoulBound() ||
+            item->GetTemplate()->Bonding == ItemBondingType::BIND_WHEN_EQUIPED ||
+            item->GetTemplate()->Bonding == ItemBondingType::NO_BIND)
+        {
+            AddToDatabase(player, item);
+        }
+    }
+
     void OnLootItem(Player* player, Item* item, uint32 /*count*/, ObjectGuid /*lootguid*/) override
     {
         if (!sT->GetUseCollectionSystem() || !item)
             return;
-        if (item->GetTemplate()->Bonding == ItemBondingType::BIND_WHEN_PICKED_UP || item->IsSoulBound())
+        if (item->GetTemplate()->Bonding == ItemBondingType::BIND_WHEN_PICKED_UP || item->IsSoulBound() ||
+            item->GetTemplate()->Bonding == ItemBondingType::BIND_WHEN_EQUIPED ||
+            item->GetTemplate()->Bonding == ItemBondingType::NO_BIND)
         {
             AddToDatabase(player, item);
         }
@@ -594,7 +608,9 @@ public:
     {
         if (!sT->GetUseCollectionSystem())
             return;
-        if (item->GetTemplate()->Bonding == ItemBondingType::BIND_WHEN_PICKED_UP || item->IsSoulBound())
+        if (item->GetTemplate()->Bonding == ItemBondingType::BIND_WHEN_PICKED_UP || item->IsSoulBound() ||
+            item->GetTemplate()->Bonding == ItemBondingType::BIND_WHEN_EQUIPED ||
+            item->GetTemplate()->Bonding == ItemBondingType::NO_BIND)
         {
             AddToDatabase(player, item);
         }
@@ -604,7 +620,9 @@ public:
     {
         if (!sT->GetUseCollectionSystem())
             return;
-        if (item->GetTemplate()->Bonding == ItemBondingType::BIND_WHEN_PICKED_UP || item->IsSoulBound())
+        if (item->GetTemplate()->Bonding == ItemBondingType::BIND_WHEN_PICKED_UP || item->IsSoulBound() ||
+            item->GetTemplate()->Bonding == ItemBondingType::BIND_WHEN_EQUIPED ||
+            item->GetTemplate()->Bonding == ItemBondingType::NO_BIND)
         {
             AddToDatabase(player, item);
         }
