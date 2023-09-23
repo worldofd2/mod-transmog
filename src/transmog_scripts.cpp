@@ -927,7 +927,7 @@ public:
 
     void OnCreateItem(Player* player, Item* item, uint32 /*count*/) override
     {
-        if (!sT->GetUseCollectionSystem())
+        if (!sT->GetUseCollectionSystem() || !item)
             return;
         if (item->GetTemplate()->Bonding == ItemBondingType::BIND_WHEN_PICKED_UP || item->IsSoulBound() ||
             item->GetTemplate()->Bonding == ItemBondingType::BIND_WHEN_EQUIPED ||
@@ -939,7 +939,7 @@ public:
 
     void OnAfterStoreOrEquipNewItem(Player* player, uint32 /*vendorslot*/, Item* item, uint8 /*count*/, uint8 /*bag*/, uint8 /*slot*/, ItemTemplate const* /*pProto*/, Creature* /*pVendor*/, VendorItem const* /*crItem*/, bool /*bStore*/) override
     {
-        if (!sT->GetUseCollectionSystem())
+        if (!sT->GetUseCollectionSystem() || !item)
             return;
         if (item->GetTemplate()->Bonding == ItemBondingType::BIND_WHEN_PICKED_UP || item->IsSoulBound() ||
             item->GetTemplate()->Bonding == ItemBondingType::BIND_WHEN_EQUIPED ||
