@@ -355,7 +355,7 @@ public:
         bool CanBeSeen(Player const* player) override
         {
             Player* target = ObjectAccessor::FindConnectedPlayer(player->GetGUID());
-            return sTransmogrification->IsEnabled() && !target->GetPlayerSetting("mod-transmog", SETTING_HIDE_TRANSMOG).value;
+            return sTransmogrification->IsEnabled() && (target && !target->GetPlayerSetting("mod-transmog", SETTING_HIDE_TRANSMOG).value);
         }
     };
 
@@ -868,6 +868,12 @@ private:
         uint32 itemId = itemTemplate->ItemId;
         uint32 accountId = player->GetSession()->GetAccountId();
         std::string itemName = itemTemplate -> Name1;
+
+        // get locale item name
+        int loc_idex = player->GetSession()->GetSessionDbLocaleIndex();
+        if (ItemLocale const* il = sObjectMgr->GetItemLocale(itemId))
+            ObjectMgr::GetLocaleString(il->Name, loc_idex, itemName);
+
         std::stringstream tempStream;
         tempStream << std::hex << ItemQualityColors[itemTemplate->Quality];
         std::string itemQuality = tempStream.str();
@@ -915,7 +921,7 @@ public:
 
     void OnLootItem(Player* player, Item* item, uint32 /*count*/, ObjectGuid /*lootguid*/) override
     {
-        if (!sT->GetUseCollectionSystem() || !item)
+        if (!sT->GetUseCollectionSystem() || !item || typeid(*item) != typeid(Item))
             return;
         if (item->GetTemplate()->Bonding == ItemBondingType::BIND_WHEN_PICKED_UP || item->IsSoulBound() ||
             item->GetTemplate()->Bonding == ItemBondingType::BIND_WHEN_EQUIPED ||
